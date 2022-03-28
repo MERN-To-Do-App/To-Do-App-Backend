@@ -2,12 +2,16 @@ const User = require("../models/user");
 const passport = require('passport')
 
 module.exports.createNewUser = (req, res) => {
-  const {name, email, password} = req.body
+  const {name, email, password, confirmPassword} = req.body
 
-
+  console.log(req.body)
   //fields blank check
   if(!name || !email || !password){
-    return res.status(400).json({ msg: "Not all fields have been entered." });
+    return res.status(400).send({ msg: "Not all fields have been entered." });
+  }
+
+  if(password!==confirmPassword){
+    return res.status(400).send({ msg: "Password not matching..." });
   }
 
   //duplicate user check
@@ -22,10 +26,10 @@ module.exports.createNewUser = (req, res) => {
     (err,user)=>{
       if (err) {
         console.log(err);
-        res.status(400).json({ msg: "Error creating user" });
+        res.status(400).send({ msg: "Error creating user" });
       }else{
         passport.authenticate("local")(req, res, () => {
-          res.status(200).json(user);
+          res.status(200).send(user);
         });
       }
     }

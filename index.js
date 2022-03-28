@@ -15,15 +15,19 @@ const signUpRoute = require("./routes/signUp");
 //dbconnect
 connectDB();
 
+////middleware
+
 //cors
 app.use(cors({
   origin: "http://localhost:3000",
   credentials: true,
 }));
 
-//middleware
+//express
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+//session
 app.use(
   session({
     secret: process.env.SECRET_KEY,
@@ -35,26 +39,7 @@ app.use(
 //Passport
 app.use(passport.initialize());
 app.use(passport.session());
-
-const LocalStrategy = require('passport-local').Strategy
-
-passport.use(
-  new LocalStrategy({
-    usernameField: 'email'
-  },
-  User.authenticate()
-  )
-);
-
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
-    done(err, user);
-  });
-});
+require('./config/passport')();
 
 //use routes
 app.use("/api/signUp", signUpRoute);
