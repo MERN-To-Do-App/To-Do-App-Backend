@@ -11,6 +11,7 @@ const app = express();
 
 //Routes
 const signUpRoute = require("./routes/signUp");
+const loginRoute = require('./routes/login');
 const userRoute = require("./routes/user");
 
 //dbconnect
@@ -44,6 +45,7 @@ require('./config/passport')();
 
 //use routes
 app.use("/api/signUp", signUpRoute);
+app.use('/api/login', loginRoute);
 app.use("/api/user", userRoute);
 
 app.listen(process.env.PORT, () => {

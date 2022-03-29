@@ -1,6 +1,7 @@
 const User = require("../models/user");
 
 module.exports.getUser = (req, res) => {
+  console.log(req);
   if (req.isAuthenticated()) {
     const id = req.session.passport.user;
     User.findById(id, (err, user) => {
