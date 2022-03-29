@@ -3,8 +3,6 @@ const passport = require('passport')
 
 module.exports.createNewUser = (req, res) => {
   const {name, email, password, confirmPassword} = req.body
-
-  console.log(req.body)
   //fields blank check
   if(!name || !email || !password){
     return res.status(400).send({ msg: "Not all fields have been entered." });
@@ -30,6 +28,7 @@ module.exports.createNewUser = (req, res) => {
       }else{
         passport.authenticate("local")(req, res, () => {
           res.status(200).send(user);
+          console.log(req.session.passport.user);
         });
       }
     }
