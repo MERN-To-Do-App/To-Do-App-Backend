@@ -1,9 +1,21 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var passportLocalMongoose = require('passport-local-mongoose');    
+const mongoose = require("mongoose");
+const passportLocalMongoose = require('passport-local-mongoose')
+const listSchema = require('./list')
 
-var User = new Schema({});
 
-User.plugin(passportLocalMongoose); // Add support for username and hashed storage password  (for Passport)
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: {
+    type: String,
+    lowercase: true,
+    required: [true, "can't be blank"],
+    unique: true,
+  },
+  username: String,
+  password: String,
+  lists: [listSchema],
+});
 
-module.exports = mongoose.model('User', User);
+userSchema.plugin(passportLocalMongoose)
+
+module.exports = new mongoose.model("User", userSchema);

@@ -1,42 +1,97 @@
-const express = require('express');
-const session = require('express-session');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const passport = require('passport');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const passport = require('passport')
+const session = require('express-session')
 
-const authenticate = require('./authenticate');
-const loginRoute = require('./routes/login');
+
+const connectDB = require("./config/database");
+const User = require('./models/user')
 
 const app = express();
-const url = 'mongodb://localhost:27017/taskManagement';
 
-mongoose.connect(url)
-.then(db => console.log('Connected to the database'))
-.catch(err => console.log(err));
+const loginRoute = require('./routes/login');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
+connectDB();
+
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
 }));
 
-app.use(session({
-    name:'session-id',
-    secret: '12345-67890-09876-54321',
-    saveUninitialized: false,
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
     resave: false,
-    })); 
+    saveUninitialized: true,
+  })
+);
 
 app.use(passport.initialize());  
 app.use(passport.session()); 
-app.use('/users', usersRouter);
+require('./config/passport')();
+
+app.use('/api/login', loginRoute);
 
 
-app.listen(3000, () =>{
-    console.log('Serer is started successfully');
+app.listen(process.env.PORT, () => {
+  console.log("Server started on port " + process.env.PORT);
 });
 
-
 /*
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const passport = require('passport')
+const session = require('express-session')
 
+const connectDB = require("./config/database");
+const User = require('./models/user')
+
+const app = express();
+
+//Routes
+const signUpRoute = require("./routes/signUp");
+const userRoute = require("./routes/user");
+
+//dbconnect
+connectDB();
+
+////middleware
+
+//cors
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}));
+
+//express
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+//session
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+//Passport
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport')();
+
+//use routes
+app.use("/api/signUp", signUpRoute);
+app.use("/api/user", userRoute);
+
+app.listen(process.env.PORT, () => {
+  console.log("Server started on port " + process.env.PORT);
+});
 
 */
