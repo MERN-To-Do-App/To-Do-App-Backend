@@ -27,8 +27,8 @@ module.exports.createNewUser = (req, res) => {
         res.status(400).send({error:err, msg: "Error creating user" });
       }else{
         passport.authenticate("local")(req, res, () => {
-          res.status(200).send({msg: "Regstration successful"});
-          console.log(user);
+          const userData = req.user
+          res.status(200).send({user: userData, msg: "Regstration successful"});
         });
       }
     }

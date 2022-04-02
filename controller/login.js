@@ -14,7 +14,8 @@ module.exports.login = (req, res) => {
       res.status(401).send({msg: "Login failed"})
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.status(200).send({msg:"Login successful"});
+        const userData = req.user
+        res.status(200).send({user: userData, msg:"Login successful"});
       });
     }
   });
