@@ -12,13 +12,20 @@ module.exports.createNewUser = (req, res) => {
     return res.status(400).send({ msg: "Password not matching..." });
   }
 
+  const predefinedLists = [
+    {name: 'My Day', items:[]},
+    {name: 'Important', items:[]},
+    {name: 'Planned', items:[]},
+    {name: 'Assigned', items:[]}
+  ]
+
   //duplicate user check
   User.register(
     {
       name: name,
       email: email,
       username: email,
-      lists: []
+      lists: [...predefinedLists]
     },
     password,
     (err,user)=>{
