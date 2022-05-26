@@ -21,6 +21,7 @@ connectDB();
 
 //cors
 app.use(cors({
+  'Access-Control-Allow-Origin': '*',
   origin: '*',
   credentials: true,
   optionSuccessStatus: 200
