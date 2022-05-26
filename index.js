@@ -21,8 +21,9 @@ connectDB();
 
 //cors
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: '*',
   credentials: true,
+  optionSuccessStatus: 200
 }));
 
 //express
