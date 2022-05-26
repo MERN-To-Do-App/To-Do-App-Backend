@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const passport = require('passport')
+const passport = require('./config/passport')
 const session = require('express-session')
 
 const connectDB = require("./config/database");
@@ -21,27 +21,26 @@ connectDB();
 
 //cors
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: process.env.CLIENT_URL,
   credentials: true,
 }));
 
 //express
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 //session
 app.use(
   session({
     secret: process.env.SECRET_KEY,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 
 //Passport
 app.use(passport.initialize());
 app.use(passport.session());
-require('./config/passport')();
 
 //use routes
 app.use("/api/signUp", signUpRoute);

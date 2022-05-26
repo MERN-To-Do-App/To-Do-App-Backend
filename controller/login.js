@@ -1,4 +1,4 @@
-const passport = require("passport");
+const passport = require("../config/passport");
 const User = require("../models/user");
 
 module.exports.login = (req, res) => {

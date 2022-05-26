@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const passport = require('passport')
+const passport = require('../config/passport')
 
 module.exports.createNewUser = (req, res) => {
   const {name, email, password, confirmPassword} = req.body
@@ -21,17 +21,17 @@ module.exports.createNewUser = (req, res) => {
 
   //duplicate user check
   User.register(
-    {
+    new User({
       name: name,
       email: email,
       username: email,
       lists: [...predefinedLists]
-    },
+    }),
     password,
     (err,user)=>{
       if (err) {
         console.log(err);
-        res.status(400).send({error:err, msg: "Error creating user" });
+        res.status(400).send({error:err, msg: "Email is already registered" });
       }else{
         passport.authenticate("local")(req, res, () => {
           const userData = req.user
